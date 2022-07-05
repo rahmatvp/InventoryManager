@@ -1,6 +1,8 @@
 ﻿using InventoryManager.Data;
 using InventoryManager.Interfaces;
 using InventoryManager.Models;
+using Microsoft.Data.SqlClient;
+using System.Linq;
 
 namespace InventoryManager.Repositories
 {
@@ -27,9 +29,39 @@ namespace InventoryManager.Repositories
             return unit;
         }
 
-        public List<Unit> GetItems()
+        //public List<Unit> GetItems()
+        //{
+        //    List<Unit> units = _context.units.ToList();
+        //    return units;
+        //}
+        public List<Unit> GetItems(string SortProperty, SortOrder sortOrder) //nambah sorting
         {
             List<Unit> units = _context.units.ToList();
+
+            if (SortProperty.ToLower() == "name") 
+            {
+                if (sortOrder== SortOrder.Ascending)
+                {
+                    units =units.OrderBy(n => n.Name).ToList();
+                }
+                else
+                {
+                    units = units.OrderByDescending(n => n.Name).ToList();
+                }
+            }
+            else
+            {
+                if (sortOrder == SortOrder.Ascending)
+                {
+                    units = units.OrderBy(n => n.Description).ToList();
+                }
+                else
+                {
+                    units = units.OrderByDescending(n => n.Description).ToList();
+                }
+
+            }
+
             return units;
         }
 

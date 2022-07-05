@@ -1,10 +1,12 @@
 ﻿using InventoryManager.Models;
+using Microsoft.Data.SqlClient;
 
 namespace InventoryManager.Interfaces
 {
     public interface IUnit
     {
-        List<Unit> GetItems();
+        //List<Unit> GetItems();
+        List<Unit> GetItems(string SortProperty, SortOrder sortOrder);
 
         Unit GetUnit(int id);
 

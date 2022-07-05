@@ -2,17 +2,64 @@
 using InventoryManager.Interfaces;
 using InventoryManager.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Data.SqlClient;
 
 namespace InventoryManager.Controllers
 {
     public class UnitController : Controller
     {
-        public IActionResult Index()
-        {
-            //List<Unit> units = _context.units.ToList();  
-            //return View(units);
+        //public IActionResult Index()
+        //{
+        //    //List<Unit> units = _context.units.ToList();  
+        //    //return View(units);
 
-            List<Unit> units = _unitRepo.GetItems();  /*kl ini pake repository pattern*/
+        //    List<Unit> units = _unitRepo.GetItems();  /*kl ini pake repository pattern*/
+        //    return View(units);
+
+        //}
+
+        public IActionResult Index(string sortExpression="")
+        {
+            ViewData["sortParamName"] = "name";
+            ViewData["sortParamDesc"] = "description";
+
+            ViewData["SortIconName"] = "";
+            ViewData["SortIconDesc"] = "";
+
+            SortOrder sortOrder;
+            string sortProperty;
+
+            switch (sortExpression.ToLower())
+            {
+                case "name_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortProperty = "name";
+                    ViewData["sortParamName"] = "name";
+                    ViewData["SortIconName"] = "fa fa-arrow-up";
+                    break;
+                case "description":
+                    sortOrder = SortOrder.Ascending;
+                    sortProperty = "description";
+                    ViewData["sortParamDesc"] = "description_Desc";
+                    ViewData["SortIconDesc"] = "fa fa-arrow-down";
+                    break;
+                case "description_desc":
+                    sortOrder = SortOrder.Descending;
+                    sortProperty = "description";
+                    ViewData["sortParamDesc"] = "description";
+                    ViewData["SortIconDesc"] = "fa fa-arrow-up";
+                    break;
+                default : //default order by name asc
+                    sortOrder = SortOrder.Ascending;
+                    sortProperty = "name";
+                    ViewData["sortParamName"] = "name_desc";
+                    ViewData["SortIconName"] = "fa fa-arrow-down";
+                    break;
+
+            }
+
+
+            List<Unit> units = _unitRepo.GetItems(sortProperty, sortOrder);  /*kl ini pake repository pattern*/
             return View(units);
 
         }

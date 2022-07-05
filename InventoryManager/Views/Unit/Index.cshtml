@@ -13,10 +13,18 @@
     <thead>
         <tr>
             <th>
+                @*@Html.DisplayNameFor(model => model.Name)*@
+                <i class="@ViewData["SortIconName"]" arial-hidden="true"></i>
+                <a asp-action="Index" asp-route-sortExpression="@ViewData["SortParamName"]">
                 @Html.DisplayNameFor(model => model.Name)
+                </a>
             </th>
             <th>
+                @*@Html.DisplayNameFor(model => model.Description)*@
+                <i class="@ViewData["SortIconDesc"]" arial-hidden="true"></i>
+                <a asp-action="Index" asp-route-sortExpression="@ViewData["SortParamDesc"]">
                 @Html.DisplayNameFor(model => model.Description)
+                </a>
             </th>
             <th></th>
         </tr>
