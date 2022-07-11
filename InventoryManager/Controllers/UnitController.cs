@@ -18,48 +18,104 @@ namespace InventoryManager.Controllers
 
         //}
 
+
+        //private SortModel ApplySort(string sortExpression)
+        //{
+        //    ViewData["sortParamName"] = "name";
+        //    ViewData["sortParamDesc"] = "description";
+
+        //    ViewData["SortIconName"] = "";
+        //    ViewData["SortIconDesc"] = "";
+
+        //    SortModel sortOrder = new SortModel();
+
+        //    switch (sortExpression.ToLower())
+        //    {
+        //        case "name_desc":
+        //            sortOrder.sortOrder = SortOrder.Descending;
+        //            sortOrder.sortProperty = "name";
+        //            ViewData["sortParamName"] = "name";
+        //            ViewData["SortIconName"] = "fa fa-arrow-up";
+        //            break;
+        //        case "description":
+        //            sortOrder.sortOrder = SortOrder.Ascending;
+        //            sortOrder.sortProperty = "description";
+        //            ViewData["sortParamDesc"] = "description_Desc";
+        //            ViewData["SortIconDesc"] = "fa fa-arrow-down";
+        //            break;
+        //        case "description_desc":
+        //            sortOrder.sortOrder = SortOrder.Descending;
+        //            sortOrder.sortProperty = "description";
+        //            ViewData["sortParamDesc"] = "description";
+        //            ViewData["SortIconDesc"] = "fa fa-arrow-up";
+        //            break;
+        //        default: //default order by name asc
+        //            sortOrder.sortOrder = SortOrder.Ascending;
+        //            sortOrder.sortProperty = "name";
+        //            ViewData["sortParamName"] = "name_desc";
+        //            ViewData["SortIconName"] = "fa fa-arrow-down";
+        //            break;
+
+        //    }
+
+        //    return sortOrder;
+        //} // jd dipindah ke model untuk menerapkan OOP
+
         public IActionResult Index(string sortExpression="")
         {
-            ViewData["sortParamName"] = "name";
-            ViewData["sortParamDesc"] = "description";
+            //ViewData["sortParamName"] = "name";
+            //ViewData["sortParamDesc"] = "description";
 
-            ViewData["SortIconName"] = "";
-            ViewData["SortIconDesc"] = "";
+            //ViewData["SortIconName"] = "";
+            //ViewData["SortIconDesc"] = "";
 
-            SortOrder sortOrder;
-            string sortProperty;
-
-            switch (sortExpression.ToLower())
-            {
-                case "name_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortProperty = "name";
-                    ViewData["sortParamName"] = "name";
-                    ViewData["SortIconName"] = "fa fa-arrow-up";
-                    break;
-                case "description":
-                    sortOrder = SortOrder.Ascending;
-                    sortProperty = "description";
-                    ViewData["sortParamDesc"] = "description_Desc";
-                    ViewData["SortIconDesc"] = "fa fa-arrow-down";
-                    break;
-                case "description_desc":
-                    sortOrder = SortOrder.Descending;
-                    sortProperty = "description";
-                    ViewData["sortParamDesc"] = "description";
-                    ViewData["SortIconDesc"] = "fa fa-arrow-up";
-                    break;
-                default : //default order by name asc
-                    sortOrder = SortOrder.Ascending;
-                    sortProperty = "name";
-                    ViewData["sortParamName"] = "name_desc";
-                    ViewData["SortIconName"] = "fa fa-arrow-down";
-                    break;
-
-            }
+            //SortOrder sortOrder;
+            //string sortProperty;
 
 
-            List<Unit> units = _unitRepo.GetItems(sortProperty, sortOrder);  /*kl ini pake repository pattern*/
+            //switch (sortExpression.ToLower())
+            //{
+            //    case "name_desc":
+            //        sortOrder = SortOrder.Descending;
+            //        sortProperty = "name";
+            //        ViewData["sortParamName"] = "name";
+            //        ViewData["SortIconName"] = "fa fa-arrow-up";
+            //        break;
+            //    case "description":
+            //        sortOrder = SortOrder.Ascending;
+            //        sortProperty = "description";
+            //        ViewData["sortParamDesc"] = "description_Desc";
+            //        ViewData["SortIconDesc"] = "fa fa-arrow-down";
+            //        break;
+            //    case "description_desc":
+            //        sortOrder = SortOrder.Descending;
+            //        sortProperty = "description";
+            //        ViewData["sortParamDesc"] = "description";
+            //        ViewData["SortIconDesc"] = "fa fa-arrow-up";
+            //        break;
+            //    default : //default order by name asc
+            //        sortOrder = SortOrder.Ascending;
+            //        sortProperty = "name";
+            //        ViewData["sortParamName"] = "name_desc";
+            //        ViewData["SortIconName"] = "fa fa-arrow-down";
+            //        break;
+
+            //}
+
+
+            //SortModel sortModel = ApplySort(sortExpression);
+
+            ////List<Unit> units = _unitRepo.GetItems(sortProperty, sortOrder);  /*kl ini pake repository pattern*/
+            //List<Unit> units = _unitRepo.GetItems(sortModel.sortProperty, sortModel.sortOrder);  /*kl ini pake repository pattern*/
+
+            SortModel sortModel = new SortModel();
+            sortModel.AddColumn("name");
+            sortModel.AddColumn("description");
+            sortModel.ApplySort(sortExpression);
+
+            ViewData["sortModel"] = sortModel;
+
+            List<Unit> units = _unitRepo.GetItems(sortModel.sortProperty, sortModel.sortOrder);
             return View(units);
 
         }
